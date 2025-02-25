@@ -1,0 +1,155 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hybridframework</groupId>
+    <artifactId>orangehrm</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <selenium.version>4.28.1</selenium.version>
+        <testng.version>7.4.0</testng.version>
+        <webdrivermanager.version>5.3.0</webdrivermanager.version>
+        <slf4j.version>1.7.31</slf4j.version> <!-- Phiên bản SLF4J -->
+        <poi.version>5.0.0</poi.version> <!-- Phiên bản Apache POI -->
+        <monte.version>0.7.7.0</monte.version> <!-- Phiên bản Monte Screen Recorder -->
+        <log4j.version>2.19.0</log4j.version> <!-- Phiên bản Log4j -->
+        <allure.version>2.19.0</allure.version> <!-- Phiên bản Allure -->
+    </properties>
+
+    <dependencies>
+        <!-- Selenium WebDriver: Dùng để tự động hóa kiểm thử web -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- TestNG: Framework kiểm thử đơn vị và tích hợp, hỗ trợ chạy test với XML -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- WebDriverManager: Quản lý driver (như ChromeDriver) tự động, không cần tải offline -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
+
+        <!-- SLF4J Simple: Giao diện logging đơn giản, dùng để log trong test -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.31</version>
+        </dependency>
+
+        <!-- Apache POI: Đọc/ghi file Excel (.xls, .xlsx) cho kiểm thử dữ liệu -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.poi</groupId>-->
+        <!--            <artifactId>poi</artifactId>-->
+        <!--            <version>${poi.version}</version>-->
+        <!--        </dependency>-->
+
+        <!-- Apache POI OOXML: Hỗ trợ đọc/ghi file Excel nâng cao (.xlsx) -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.poi</groupId>-->
+        <!--            <artifactId>poi-ooxml</artifactId>-->
+        <!--            <version>${poi.version}</version>-->
+        <!--        </dependency>-->
+
+        <!-- TestNG (lặp lại, sửa scope về compile để dùng trong code chính nếu cần) -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Monte Screen Recorder: Ghi lại màn hình trong quá trình chạy test -->
+        <dependency>
+            <groupId>com.github.stephenc.monte</groupId>
+            <artifactId>monte-screen-recorder</artifactId>
+            <version>${monte.version}</version>
+        </dependency>
+
+        <!-- Log4j Core: Cốt lõi của Log4j để xử lý logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- Log4j API: Thư viện logging để ghi log ứng dụng -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- Allure TestNG: Tạo báo cáo Allure cho kiểm thử TestNG -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-attachments</artifactId>
+            <version>2.19.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Plugin để compile Java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin để chạy TestNG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/runAllTestcases.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin Allure (nếu mày muốn tạo báo cáo Allure trên GitHub Actions) -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.15.2</version> <!-- Thay bằng phiên bản mới nhất hoặc phù hợp -->
+                <configuration>
+                    <reportVersion>2.19.0</reportVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
