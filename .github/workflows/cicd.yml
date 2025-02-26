@@ -66,15 +66,3 @@ jobs:
         with:
           name: test-reports
           path: target/surefire-reports/
-      - name: Move Allure Report to gh-pages
-        run: |
-          mkdir -p gh-pages
-          cp -r target/site/allure-maven-plugin/* gh-pages/
-        if: always()
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./gh-pages
-        if: always()
