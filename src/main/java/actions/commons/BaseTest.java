@@ -1,5 +1,6 @@
 package actions.commons;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -36,6 +37,7 @@ public class BaseTest extends BasePage{
     }
     public WebDriver openBrowser (String browserName, boolean headless) {
         if (browserName.equalsIgnoreCase("Chrome")) {
+            WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
             if (headless) {
                 options.addArguments("--headless=new"); // run in Headless mode
@@ -44,13 +46,15 @@ public class BaseTest extends BasePage{
             options.addArguments("--window-size=1920,1080"); // size of screen
             driver = new ChromeDriver(options);
         } else if (browserName.equalsIgnoreCase("Edge")) {
+            WebDriverManager.firefoxdriver().setup();
             EdgeOptions options = new EdgeOptions();
             if (headless) {
                 options.addArguments("--headless=new");
             }
             driver = new EdgeDriver(options);
         } else if (browserName.equalsIgnoreCase("Firefox")) {
-                FirefoxOptions options = new FirefoxOptions();
+            WebDriverManager.edgedriver().setup();
+            FirefoxOptions options = new FirefoxOptions();
                 if (headless) {
                     options.addArguments("--headless");
                 }
