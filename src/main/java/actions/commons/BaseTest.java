@@ -42,7 +42,9 @@ public class BaseTest extends BasePage{
             if (headless) {
                 options.addArguments("--headless=new"); // run in Headless mode
             }
+            options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis());
             options.addArguments("--disable-gpu"); // stability
+            options.addArguments("--no-sandbox");
             options.addArguments("--window-size=1920,1080"); // size of screen
             driver = new ChromeDriver(options);
         } else if (browserName.equalsIgnoreCase("Edge")) {
