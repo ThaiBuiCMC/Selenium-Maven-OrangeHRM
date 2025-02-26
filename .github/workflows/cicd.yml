@@ -15,15 +15,15 @@ jobs:
       - name: Checkout code #to get the right sourse code from repository
         uses: actions/checkout@v4
 
-      - name: Set up Chrome and ChromeDriver
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
-          CHROME_VERSION=$(chromium-browser --version | cut -f3 -d' ' | cut -d'.' -f1)
-          CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-          wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip -d /usr/local/bin/
-          chmod +x /usr/local/bin/chromedriver
+#      - name: Set up Chrome and ChromeDriver
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y chromium-browser
+#          CHROME_VERSION=$(chromium-browser --version | cut -f3 -d' ' | cut -d'.' -f1)
+#          CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+#          wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+#          unzip chromedriver_linux64.zip -d /usr/local/bin/
+#          chmod +x /usr/local/bin/chromedriver
 
       - name: Set up JDK 17 #need to match with pom.xml
         uses: actions/setup-java@v4
