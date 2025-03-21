@@ -37,7 +37,7 @@ public class BaseTest extends BasePage{
     }
     public WebDriver openBrowser (String browserName, boolean headless) {
         if (browserName.equalsIgnoreCase("Chrome")) {
-            WebDriverManager.chromedriver().clearDriverCache().setup();
+            //WebDriverManager.chromedriver().clearDriverCache().setup();
             ChromeOptions options = new ChromeOptions();
             if (headless) {
                 options.addArguments("--headless=new"); // run in Headless mode
