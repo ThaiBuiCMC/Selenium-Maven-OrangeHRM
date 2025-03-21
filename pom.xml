@@ -20,6 +20,9 @@
         <monte.version>0.7.7.0</monte.version> <!-- Phiên bản Monte Screen Recorder -->
         <log4j.version>2.19.0</log4j.version> <!-- Phiên bản Log4j -->
         <allure.version>2.19.0</allure.version> <!-- Phiên bản Allure -->
+        <allure.attachments.version>2.29.0</allure.attachments.version>
+        <aspectj.version>1.9.22.1</aspectj.version> <!-- Phiên bản mới nhất của AspectJ -->
+        <lombok.version>1.18.36</lombok.version> <!-- Phiên bản mới nhất của Lombok -->
     </properties>
 
     <dependencies>
@@ -108,11 +111,25 @@
             <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments -->
+        <!-- Allure Attachments -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-attachments</artifactId>
-            <version>2.19.0</version>
+            <version>${allure.attachments.version}</version>
+        </dependency>
+
+        <!-- AspectJ Weaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <!-- Project Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
     </dependencies>
 
@@ -138,6 +155,13 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/runAllTestcases.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <systemPropertyVariables>
+                        <allure.results.directory>allure-results</allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
 

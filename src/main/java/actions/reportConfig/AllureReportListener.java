@@ -66,14 +66,22 @@ public class AllureReportListener implements ITestListener {
     public void onTestFailure(ITestResult iTestResult) {
         //Allure Screenshot custom
         Log.LogPrint.error("Screenshot captured for test case: " + getTestName(iTestResult));
+        ///For driver in saved context in BaseTest
+        ITestContext context = iTestResult.getTestContext();
+        WebDriver driver = (WebDriver) context.getAttribute("WebDriver");
+        //
+        if (iTestResult.getThrowable() != null) {
+            Log.LogPrint.error("Test failed due to: " + iTestResult.getThrowable().getMessage());
+        }
+        //
         if (driver != null && ((RemoteWebDriver) driver).getSessionId() != null) {
             saveScreenshotPNG(driver);
         } else {
             Log.LogPrint.error("Driver is null or session is closed, cannot take screenshot!");
         }
-        //Save a log on Allure report.
+        //Save a log on Allure report and failed stt for out of time
         saveTextLog(getTestName(iTestResult) + " failed and screenshot taken!");
-        throw new RuntimeException("Test failed: " + getTestName(iTestResult));
+        //throw new AssertionError("Test failed: " + getTestName(iTestResult), iTestResult.getThrowable()); --> make duplicate error and broken status in Allure
     }
 
     @Override
