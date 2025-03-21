@@ -45,7 +45,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run TestNG Tests with Maven
-        run: mvn clean test -q
+        run: mvn clean test --fail-at-end #Chạy hết test rồi báo lỗi
       # Sử dụng `mvn clean test` thay vì `mvn clean install` để chỉ chạy test mà không đóng gói JAR,
       # đảm bảo chạy đúng `runAllTestcases.xml` (nếu đã cấu hình trong `maven-surefire-plugin`).
 
