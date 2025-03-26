@@ -1,5 +1,6 @@
 package testcases.admin.organization;
 
+import actions.commons.BasePage;
 import actions.commons.BaseTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
@@ -10,33 +11,19 @@ import actions.reportConfig.AllureReportListener;
 @Listeners(AllureReportListener.class)
 @Epic("Check demo Epic")
 @Feature("Check demo Feature Report")
-public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
-    //Define
-    //WebDriver driver;
-    GeneralInforPageObject generalInforPage;
-    String updatedName, phone, email, country;
-
+public class UserManagement extends BasePage {
+    UserManagementPageObject userManagementPage;
     @BeforeClass
-    @Description("Open Generate Information Page")
+    @Description("Open User management Page")
     public void beforeClass(){
-        updatedName =  "Huyen Checked"+getRandomNumber();
-        phone = "0934653"+getRandomNumber();
-        email = "check"+getRandomNumber()+"@gmail.com";
-        country = "Antigua and Barbuda";
-        generalInforPage = new GeneralInforPageObject(driver);
-        generalInforPage.clickToAdminSection();
-        generalInforPage.clickToOrganization();
-        generalInforPage.clickToGenerateInformationOption();
+
+        userManagementPage = new UserManagementPageObject(driver);
+        userManagementPage.clickToAdminSection();
+        userManagementPage.clickToOrganization();
+        userManagementPage.clickToGenerateInformationOption();
     }
     @Test
-    @Step("Check UI")//mandtory for report
-    public void GI_01_CheckUI(){
-        //verifyTrue();
-        //Assert.assertTrue(false, "check case fail");
-        System.out.println("Huyen check");
-    }
-    @Test
-    @Step("Edit")
+    @Step("Create new User")
     @Severity(SeverityLevel.TRIVIAL)
     public void GI_01_EditGeneralInformation() {
         generalInforPage.clickToEditToggle();
