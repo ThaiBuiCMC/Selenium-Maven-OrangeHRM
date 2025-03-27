@@ -13,7 +13,7 @@
 <!--            </run>-->
 <!--        </groups>-->
         <classes>
-            <class name="testcases.admin.organization.Locations"></class>
+            <class name="testcases.admin.organization.Structure"></class>
         </classes>
 <!--        <packages>-->
 <!--            <package name="testcases.admin.organization"></package>-->
