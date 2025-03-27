@@ -175,11 +175,11 @@ public class BasePage {
         }
     }
     public boolean isElementDisplayed(WebDriver driver, String locator) {
-//        try {
+        try {
             return getWebElement(driver, locator).isDisplayed();
-//        } catch (NoSuchElementException e) {
-//            return false;
-//        }
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
     public boolean isElementSelected(WebDriver driver, String locator) {
         return getWebElement(driver, locator).isSelected();
