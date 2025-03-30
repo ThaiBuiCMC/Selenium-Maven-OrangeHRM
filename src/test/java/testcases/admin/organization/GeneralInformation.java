@@ -1,8 +1,6 @@
 package testcases.admin.organization;
-
 import actions.commons.BaseTest;
 import io.qameta.allure.*;
-import org.testng.Assert;
 import org.testng.annotations.*;
 import actions.pageObject.admin.organization.GeneralInforPageObject;
 import actions.reportConfig.AllureReportListener;
@@ -12,12 +10,10 @@ import actions.reportConfig.AllureReportListener;
 @Feature("Check demo Feature Report")
 public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
     //Define
-    //WebDriver driver;
     GeneralInforPageObject generalInforPage;
     String updatedName, phone, email, country;
 
-
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     @Description("Open Generate Information Page")
     public void beforeClass(){
         updatedName =  "Huyen Checked"+getRandomNumber();
@@ -32,9 +28,10 @@ public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
     @Test
     @Step("Check UI")//mandtory for report
     public void GI_01_CheckUI(){
-        //verifyTrue();
-        //Assert.assertTrue(false, "check case fail");
-        System.out.println("Huyen check");
+        verifyTrue(generalInforPage.checkTitleDisplayed());
+        verifyTrue(generalInforPage.checkEditToggleDisplayed());
+        verifyTrue(generalInforPage.checkNumberOfEmployeeDisplayed());
+        //verifyEquals(generalInforPage.getSuccessMessage(),"Successfully Updated"); //- For testing failed
     }
     @Test
     @Step("Edit")

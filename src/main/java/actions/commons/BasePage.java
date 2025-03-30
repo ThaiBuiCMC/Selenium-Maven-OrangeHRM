@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BasePage {
     //common functions support for all PageObjects
@@ -95,16 +96,19 @@ public class BasePage {
     private WebElement getWebElement(WebDriver driver, String locator){ //only use for some funcs in this class -> private
         return  driver.findElement(getByXpath(locator));
     }
-    private List<WebElement> getListWebElements(WebDriver driver, String locator){
+    public List<WebElement> getListWebElements(WebDriver driver, String locator){
         return driver.findElements(getByXpath(locator));
     }
     public void clickToElement(WebDriver driver, String locator){
         getWebElement(driver, locator).click();
     }
     public void sendkeyToElement(WebDriver driver, String locator, String valueToSend) {
-        getWebElement(driver, locator).clear();
+        clearValueInField(driver, locator);
         getWebElement(driver, locator).sendKeys(valueToSend);
         waitForInputValuePresence(driver,locator,valueToSend);
+    }
+    public void sendkeyToUpload(WebDriver driver, String locator, String path){
+        getWebElement(driver, locator).sendKeys(path);
     }
     public void selectItemDropdown(WebDriver driver, String locator, String textItem) {
         new Select(getWebElement(driver, locator)).selectByVisibleText(textItem);
@@ -144,6 +148,25 @@ public class BasePage {
     public int getListElementSize(WebDriver driver, String locator) {
         return getListWebElements(driver, locator).size();
     }
+    public String getAllTextsInList(WebDriver driver, String locator){
+//        //Get all elements contain Texts
+//        List<WebElement> listElements = getListWebElements(driver, locator);
+//        //Get all Texts and arrange it into an ArrayList
+//        List<String> texts = new ArrayList<>();
+//        for (WebElement element : listElements){
+//            texts.add(element.getText().trim());
+//        }
+//        return String.join(";", texts);
+
+        return getListWebElements(driver, locator)
+                .stream() // Start to use Stream
+                .map(e -> e.getText().trim())  // Get text and trim()
+                .filter(text -> !text.isEmpty()) // Only keep not null
+                .collect(Collectors.joining(";")); // List array and split by ";"
+    }
+    public String getDynamicLocator(String locator, String dynamicText){
+        return String.format(locator, dynamicText);
+    }
     public void checkToCheckboxRadio(WebDriver driver, String locator) {
         if (!getWebElement(driver, locator).isSelected()) {
             getWebElement(driver, locator).click();
@@ -155,7 +178,11 @@ public class BasePage {
         }
     }
     public boolean isElementDisplayed(WebDriver driver, String locator) {
-        return getWebElement(driver, locator).isDisplayed();
+        try {
+            return getWebElement(driver, locator).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
     public boolean isElementSelected(WebDriver driver, String locator) {
         return getWebElement(driver, locator).isSelected();
@@ -169,6 +196,7 @@ public class BasePage {
     public WebDriver switchToDefaultContent(WebDriver driver) {
         return driver.switchTo().defaultContent();
     }
+
     //----UserActions
     public void hoverToElement(WebDriver driver, String locator) {
         new Actions(driver).moveToElement(getWebElement(driver, locator)).perform();
@@ -186,16 +214,9 @@ public class BasePage {
         new Actions(driver).sendKeys(getWebElement(driver, locator), key).perform();
     }
     public void clearValueInField(WebDriver driver, String locator) {
-//        new Actions(driver)
-//                .click(getWebElement(driver, locator))
-//                .click()
-//                .keyDown(Keys.CONTROL)
-//                .sendKeys("a")
-//                .keyUp(Keys.CONTROL)
-//                .sendKeys(Keys.DELETE)
-//                .perform();  // Chọn toàn bộ nội dung
         getWebElement(driver, locator).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
     }
+
     //----- jsExecutor
     public String getDomain(WebDriver driver) {
         return (String) ((JavascriptExecutor) driver).executeScript("return document.domain;");
@@ -240,9 +261,10 @@ public class BasePage {
         return (boolean) ((JavascriptExecutor) driver).executeScript("return arguments[0].complete && typeof arguments[0].naturalWidth != 'undefined' " +
                 "&& arguments[0].naturalWidth > 0;", getWebElement(driver, locator));
     }
+
     //-----Wait------
     public WebElement waitForElementVisible(WebDriver driver, String locator) {
-        return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfElementLocated(getByXpath(locator)));
+            return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfElementLocated(getByXpath(locator)));
     }
     public List<WebElement> waitForListElementVisible(WebDriver driver, String locator) {
         return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByXpath(locator)));
@@ -254,6 +276,7 @@ public class BasePage {
         return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.invisibilityOfAllElements(getListWebElements(driver, locator)));
     }
     public WebElement waitForElementClickable(WebDriver driver, String locator){
+       // return new WebDriverWait(driver,Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(getByXpath(locator))));
         return new WebDriverWait(driver,Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.elementToBeClickable(getByXpath(locator)));
     }
     public WebElement waitForElementPresence(WebDriver driver, String locator){
@@ -262,20 +285,24 @@ public class BasePage {
     private boolean waitForInputValuePresence(WebDriver driver, String locator, String inputedValue){
         return new WebDriverWait(driver,Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.textToBePresentInElementValue(getByXpath(locator), inputedValue));
     }
+    public boolean waitForStableInputValue(WebDriver driver, String locator){
+        return new WebDriverWait(driver,Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.attributeToBeNotEmpty(getWebElement(driver, locator), "value"));
+    }
     public List<WebElement> waitForListElementsPresence(WebDriver driver, String locator){
         return new WebDriverWait(driver,Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(getByXpath(locator)));
     }
     public boolean waitForElementSelected(WebDriver driver, String locator){
         return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.elementToBeSelected(getByXpath(locator)));
     }
-
-
-    public void sleepInSeconds(long timeInSeconds){
+    public void sleepInSeconds(long timeInSeconds){ //hard wait
         try {
             Thread.sleep(timeInSeconds);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
+    public static final String SUCCESS_TOAST = "//div[@class='oxd-toast-start']";
+    public static final String SUCCESS_MAIN_TOAST = "//div[@class='oxd-toast-start']/div/p[1]";
+    public static final String SUCCESS_SUB_TOAST = "//div[@class='oxd-toast-start']/div/p[2]";
     private long LONG_TIMEOUT = 30;
 }

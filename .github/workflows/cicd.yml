@@ -1,0 +1,68 @@
+name: Run Selenium TestNG Tests with Maven and Allure
+run-name: ${{ github.actor }} is running Selenium TestNG tests with Maven and Allure 🚀
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code #to get the right sourse code from repository
+        uses: actions/checkout@v4
+
+#      - name: Set up Chrome and ChromeDriver
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y chromium-browser
+#          CHROME_VERSION=$(chromium-browser --version | cut -f3 -d' ' | cut -d'.' -f1)
+#          CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+#          wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+#          unzip chromedriver_linux64.zip -d /usr/local/bin/
+#          chmod +x /usr/local/bin/chromedriver
+
+      - name: Set up JDK 17 #need to match with pom.xml
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.9.9
+
+      - name: Cache Maven dependencies #reduce cache time
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run TestNG Tests with Maven
+        run: mvn clean test --batch-mode --errors
+      # Sử dụng `mvn clean test` thay vì `mvn clean install` để chỉ chạy test mà không đóng gói JAR,
+      # đảm bảo chạy đúng `runAllTestcases.xml` (nếu đã cấu hình trong `maven-surefire-plugin`).
+
+      - name: Generate Allure Report
+        run: mvn allure:report -q
+        if: always()  # run this step eventhough it is failed.
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: target/site/allure-maven-plugin/
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: target/surefire-reports/

@@ -1,38 +1,28 @@
 package actions.pageObject.admin.organization;
-
 import actions.commons.BasePage;
-import actions.commons.GlobalConstants;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 import interfaces.pageUIs.admin.organization.GeneralInforPageUI;
-
-import java.util.Scanner;
-
 
 public class GeneralInforPageObject extends BasePage {
     private WebDriver driver;
     public GeneralInforPageObject(WebDriver driver) {
         this.driver = driver;
     }
-    //manage actions in the page
 
+    //manage actions in the page
     public void clickToAdminSection(){
         waitForElementClickable(driver,GeneralInforPageUI.ADMIN_SECTION);
         clickToElement(driver, GeneralInforPageUI.ADMIN_SECTION);
     }
+
     public void clickToOrganization(){
         waitForElementClickable(driver,GeneralInforPageUI.ORGANIZATION_ITEM);
         clickToElement(driver, GeneralInforPageUI.ORGANIZATION_ITEM);
     }
+
     public void clickToGenerateInformationOption(){
         waitForElementClickable(driver,GeneralInforPageUI.GENERAL_INFORMATION_OPTION);
         clickToElement(driver, GeneralInforPageUI.GENERAL_INFORMATION_OPTION);
-    }
-    public void verifyTitleDisplay(WebDriver driver){
-//        WebElement title = findElement(driver, GeneralInforPageUI.GENERAL_INFORMATION_TITLE);
-//        Assert.assertTrue(title.isDisplayed());
     }
 
     public void clickToEditToggle() {
@@ -63,7 +53,6 @@ public class GeneralInforPageObject extends BasePage {
 
     public void changeCountryDropdown(String country) {
         waitForElementVisible(driver,GeneralInforPageUI.COUNTRY_DROPDOWN);
-        //clickToElement(driver, GeneralInforPageUI.COUNTRY_DROPDOWN);
         selectItemInCustomDropdown(driver,GeneralInforPageUI.COUNTRY_DROPDOWN, GeneralInforPageUI.COUNTRY_LISTVALUE,country);
     }
 
@@ -75,7 +64,7 @@ public class GeneralInforPageObject extends BasePage {
     public String getSuccessMessage() {
         waitForElementVisible(driver,GeneralInforPageUI.SUCCESS_MESSAGE);
         return getElementText(driver,GeneralInforPageUI.SUCCESS_MESSAGE);
-    };
+    }
 
     public String getUpdatedOrganizationName() {
         return getElementAttribute(driver,GeneralInforPageUI.ORGANIZATION_NAME_TEXTBOX, "value");
@@ -91,5 +80,20 @@ public class GeneralInforPageObject extends BasePage {
 
     public String getUpdatedCountry() {
         return getElementText(driver, GeneralInforPageUI.COUNTRY_DROPDOWN);
+    }
+
+    public boolean checkTitleDisplayed() {
+        waitForElementVisible(driver, GeneralInforPageUI.GENERAL_INFORMATION_TITLE);
+        return isElementDisplayed(driver, GeneralInforPageUI.GENERAL_INFORMATION_TITLE);
+    }
+
+    public boolean checkEditToggleDisplayed() {
+        waitForElementVisible(driver, GeneralInforPageUI.EDIT_TOGGLE);
+        return isElementDisplayed(driver, GeneralInforPageUI.EDIT_TOGGLE);
+    }
+
+    public boolean checkNumberOfEmployeeDisplayed() {
+        waitForElementVisible(driver, GeneralInforPageUI.NUMBER_LABEL);
+        return isElementDisplayed(driver, GeneralInforPageUI.NUMBER_LABEL);
     }
 }
