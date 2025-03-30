@@ -107,6 +107,9 @@ public class BasePage {
         getWebElement(driver, locator).sendKeys(valueToSend);
         waitForInputValuePresence(driver,locator,valueToSend);
     }
+    public void sendkeyToUpload(WebDriver driver, String locator, String path){
+        getWebElement(driver, locator).sendKeys(path);
+    }
     public void selectItemDropdown(WebDriver driver, String locator, String textItem) {
         new Select(getWebElement(driver, locator)).selectByVisibleText(textItem);
     }
@@ -298,5 +301,8 @@ public class BasePage {
             throw new RuntimeException(e);
         }
     }
+    public static final String SUCCESS_TOAST = "//div[@class='oxd-toast-start']";
+    public static final String SUCCESS_MAIN_TOAST = "//div[@class='oxd-toast-start']/div/p[1]";
+    public static final String SUCCESS_SUB_TOAST = "//div[@class='oxd-toast-start']/div/p[2]";
     private long LONG_TIMEOUT = 30;
 }
