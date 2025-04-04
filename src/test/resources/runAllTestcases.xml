@@ -4,28 +4,32 @@
     <listeners>
         <listener class-name="actions.reportConfig.AllureReportListener"/>
     </listeners>
-    <test name="Run on Chrome browser">
-        <parameter name="browser" value="Chrome"></parameter>
+<!--    <test name="Run on Chrome browser">-->
+<!--        <parameter name="browser" value="Chrome"></parameter>-->
+<!--        <parameter name="headless" value="true"/>-->
+<!--&lt;!&ndash;        <groups>&ndash;&gt;-->
+<!--&lt;!&ndash;            <run>&ndash;&gt;-->
+<!--&lt;!&ndash;                <include name="runnow"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </run>&ndash;&gt;-->
+<!--&lt;!&ndash;        </groups>&ndash;&gt;-->
+<!--&lt;!&ndash;        <classes>&ndash;&gt;-->
+<!--&lt;!&ndash;            <class name="testcases.admin.organization.GeneralInformation"></class>&ndash;&gt;-->
+<!--&lt;!&ndash;        </classes>&ndash;&gt;-->
+<!--        <packages>-->
+<!--            <package name="testcases.admin.organization"></package>-->
+<!--            <package name="testcases.admin.job"></package>-->
+<!--        </packages>-->
+<!--    </test>-->
+    <test name="Run on Edge browser">
+        <parameter name="browser" value="Edge"></parameter>
         <parameter name="headless" value="true"/>
-<!--        <groups>-->
-<!--            <run>-->
-<!--                <include name="runnow"/>-->
-<!--            </run>-->
-<!--        </groups>-->
-<!--        <classes>-->
-<!--            <class name="testcases.admin.organization.GeneralInformation"></class>-->
-<!--        </classes>-->
         <packages>
             <package name="testcases.admin.organization"></package>
             <package name="testcases.admin.job"></package>
         </packages>
     </test>
+
 </suite>
 
-<!--    <test name="Run on Edge browser">-->
-<!--        <parameter name="browser" value="Edge"></parameter>-->
-<!--        <classes>-->
-<!--            <class name="admin.organization.GeneralInformation"></class>-->
-<!--        </classes>-->
-<!--    </test>-->
+
 

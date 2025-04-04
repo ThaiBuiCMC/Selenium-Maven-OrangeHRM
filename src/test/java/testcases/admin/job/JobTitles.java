@@ -7,6 +7,7 @@ import actions.reportConfig.AllureReportListener;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
@@ -42,12 +43,14 @@ public class JobTitles extends BaseTest {
         jobTitlesPage.clickToJobTitlesMenu();
     }
     @Test
+    @Step("JT_01_CheckUI")
     public void JT_01_CheckUI() {
         verifyEquals(jobTitlesPage.getJobTitlesLabel(),"Job Titles");
         verifyTrue(jobTitlesPage.isAddBtnDisplayed());
     }
 
     @Test
+    @Step("JT_02_User_Create_New_Job_Title")
     public void JT_02_User_Create_New_Job_Title() {
         name = generateRandomName();
         des = generateRandomName() + " check Des";
@@ -68,6 +71,7 @@ public class JobTitles extends BaseTest {
     }
 
     @Test
+    @Step("JT_03_User_Update_Job_Title")
     public void JT_03_User_Update_Job_Title() {
         name = generateRandomName();
         des = generateRandomName() + " check Update";
@@ -91,6 +95,7 @@ public class JobTitles extends BaseTest {
     }
 
     @Test
+    @Step("JT_04_User_Delete_Job_Title")
     public void JT_04_User_Delete_Job_Title() {
         //Create
         name = generateRandomName();
@@ -107,7 +112,8 @@ public class JobTitles extends BaseTest {
         verifyFalse(jobTitlesPage.isJobTitleDisplayed(name));
     }
 
-    @Test(groups = "runnow")
+    @Test
+    @Step("JT_05_User_Delete_Multiple_Job_Titles")
     public void JT_05_User_Delete_Multiple_Job_Titles() {
         //Create data
         name = generateRandomName();
