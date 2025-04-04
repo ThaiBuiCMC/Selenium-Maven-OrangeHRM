@@ -12,13 +12,13 @@
 <!--                <include name="runnow"/>-->
 <!--            </run>-->
 <!--        </groups>-->
-<!--        <classes>-->
-<!--            <class name="testcases.admin.organization.GeneralInformation"></class>-->
-<!--        </classes>-->
-        <packages>
-            <package name="testcases.admin.organization"></package>
-            <package name="testcases.admin.job"></package>
-        </packages>
+        <classes>
+            <class name="testcases.admin.organization.GeneralInformation"></class>
+        </classes>
+<!--        <packages>-->
+<!--            <package name="testcases.admin.organization"></package>-->
+<!--            <package name="testcases.admin.job"></package>-->
+<!--        </packages>-->
     </test>
 <!--    <test name="Run on Edge browser">-->
 <!--        <parameter name="browser" value="Edge"></parameter>-->

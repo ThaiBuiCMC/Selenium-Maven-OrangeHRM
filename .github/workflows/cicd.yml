@@ -50,7 +50,7 @@ jobs:
       # đảm bảo chạy đúng `runAllTestcases.xml` (nếu đã cấu hình trong `maven-surefire-plugin`).
 
       - name: Generate Allure Report
-        run: mvn allure:report -q
+        run: ls -lrt; pwd; ls -lrt target/; mvn allure:report -q
         if: always()  # run this step eventhough it is failed.
 
       - name: Upload Allure Report
