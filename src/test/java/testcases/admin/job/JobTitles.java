@@ -7,6 +7,8 @@ import actions.reportConfig.AllureReportListener;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -27,7 +29,8 @@ public class JobTitles extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     @Description("Open Job Titles Page")
-    public void beforeClass() {
+    public void beforeClass(ITestContext context) {
+        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
         jobTitlesPage = new JobTitlesPageObject(driver);
         jobTitlesPage.clickToAdminMenu();
     }
@@ -121,6 +124,7 @@ public class JobTitles extends BaseTest {
 
         //Checked
         jobTitlesPage.selectOnCheckbox(name);
+        System.out.println(name2);
         jobTitlesPage.selectOnCheckbox(name2);
         jobTitlesPage.clickToDeleteSelectedButton();
         jobTitlesPage.confirmDelete();

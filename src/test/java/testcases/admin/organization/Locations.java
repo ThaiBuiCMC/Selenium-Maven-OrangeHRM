@@ -7,6 +7,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -26,7 +28,8 @@ public class Locations extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     @Description("Open Location Page")
-    public void beforeClass(){
+    public void beforeClass(ITestContext context){
+        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
         locationsPage = new LocationsPageObject(driver);
         locationsPage.clickToAdminSection();
     }

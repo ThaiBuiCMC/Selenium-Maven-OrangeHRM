@@ -201,6 +201,9 @@ public class BasePage {
     public void hoverToElement(WebDriver driver, String locator) {
         new Actions(driver).moveToElement(getWebElement(driver, locator)).perform();
     }
+    public void clickToElementByActions(WebDriver driver, String locator){
+        new Actions(driver).moveToElement(getWebElement(driver, locator)).click().perform();
+    }
     public void doubleClickToElement(WebDriver driver, String locator) {
         new Actions(driver).doubleClick(getWebElement(driver, locator)).perform();
     }

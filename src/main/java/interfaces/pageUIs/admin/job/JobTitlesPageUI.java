@@ -19,5 +19,5 @@ public class JobTitlesPageUI {
     public static final String DELETE_JOB_TITLE_BUTTON = "//div[text()='%s']//ancestor::div[@role='row']//button[i[contains(@class, 'bi-trash')]]/i";
     public static final String DELETE_CONFIRM_BUTTON = "//button[text()=' Yes, Delete ']";
     public static final String DELETE_SELECTED_BUTTON = "//button[text()=' Delete Selected ']";
-    public static final String JOB_CHECKBOX = "//div[contains(text(), '%s')]//ancestor::div[@role='row']//descendant::input[@type='checkbox']";
+    public static final String JOB_CHECKBOX = "//div[text()='%s']//parent::div/preceding-sibling::div//div[@class='oxd-table-card-cell-checkbox']";
 }

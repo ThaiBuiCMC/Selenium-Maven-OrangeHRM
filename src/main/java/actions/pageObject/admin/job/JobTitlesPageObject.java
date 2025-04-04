@@ -3,8 +3,7 @@ package actions.pageObject.admin.job;
 import actions.commons.BasePage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import interfaces.pageUIs.admin.job.JobTitlesPageUI;;
-
+import interfaces.pageUIs.admin.job.JobTitlesPageUI;
 public class JobTitlesPageObject extends BasePage {
     private WebDriver driver;
 
@@ -110,11 +109,15 @@ public class JobTitlesPageObject extends BasePage {
     }
     public void selectOnCheckbox(String name){
         waitForElementVisible(driver, getDynamicLocator(JobTitlesPageUI.JOB_TITLE_NAME, name));
-        //waitForElementClickable(driver, getDynamicLocator(JobTitlesPageUI.JOB_CHECKBOX, name));
         clickToElement(driver,getDynamicLocator(JobTitlesPageUI.JOB_CHECKBOX, name));
     }
     public void clickToDeleteSelectedButton(){
+        //waitForElementVisible(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON);
+        //waitForElementPresence(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON);
+        //clickToElement(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON); --> khi scroll xuong thi khong pass
         waitForElementClickable(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON);
+    //    clickToElementByActions(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON);
+        scrollToElement(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON);
         clickToElement(driver, JobTitlesPageUI.DELETE_SELECTED_BUTTON);
     }
 }
