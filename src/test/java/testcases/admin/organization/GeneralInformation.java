@@ -6,7 +6,7 @@ import actions.pageObject.admin.organization.GeneralInforPageObject;
 import actions.reportConfig.AllureReportListener;
 
 @Listeners(AllureReportListener.class)
-@Epic("Check demo Epic")
+@Epic("Check General Information")
 @Feature("Check demo Feature Report")
 public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
     //Define
@@ -34,7 +34,7 @@ public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
         //verifyEquals(generalInforPage.getSuccessMessage(),"Successfully Updated"); //- For testing failed
     }
     @Test
-    @Step("Edit")
+    @Step("Edit General Information")
     @Severity(SeverityLevel.TRIVIAL)
     public void GI_01_EditGeneralInformation() {
         generalInforPage.clickToEditToggle();

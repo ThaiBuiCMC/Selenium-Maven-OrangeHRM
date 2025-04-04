@@ -42,12 +42,14 @@ public class BaseTest extends BasePage{
             if (headless) {
                 options.addArguments("--headless=new"); // run in Headless mode
             }
+
             //CICD
             options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis());
             options.addArguments("--disable-gpu"); // stability
             options.addArguments("--no-sandbox");
             options.addArguments("--window-size=1920,1080"); // size of screen
             driver = new ChromeDriver(options);
+
         } else if (browserName.equalsIgnoreCase("Edge")) {
             WebDriverManager.firefoxdriver().clearDriverCache().setup();
             EdgeOptions options = new EdgeOptions();
@@ -65,6 +67,7 @@ public class BaseTest extends BasePage{
         } else {
             throw new RuntimeException("Browser name is not valid!!!");
         }
+
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         //Login
