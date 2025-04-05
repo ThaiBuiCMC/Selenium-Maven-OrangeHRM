@@ -85,3 +85,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/site/allure-maven-plugin/
           publish_branch: gh-pages
+        run:
+          echo("https://huyennt04.github.io/Selenium-Maven-OrangeHRM/")
