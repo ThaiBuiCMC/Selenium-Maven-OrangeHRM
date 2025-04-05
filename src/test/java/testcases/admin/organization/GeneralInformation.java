@@ -1,6 +1,8 @@
 package testcases.admin.organization;
 import actions.commons.BaseTest;
 import io.qameta.allure.*;
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
 import org.testng.annotations.*;
 import actions.pageObject.admin.organization.GeneralInforPageObject;
 import actions.reportConfig.AllureReportListener;
@@ -15,7 +17,8 @@ public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
 
     @BeforeClass(alwaysRun = true)
     @Description("Open Generate Information Page")
-    public void beforeClass(){
+    public void beforeClass(ITestContext context){
+        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
         updatedName =  "Huyen Checked"+getRandomNumber();
         phone = "0934653"+getRandomNumber();
         email = "check"+getRandomNumber()+"@gmail.com";
