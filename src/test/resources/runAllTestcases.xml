@@ -18,6 +18,7 @@
         <packages>
             <package name="testcases.admin.organization"></package>
             <package name="testcases.admin.job"></package>
+            <package name="testcases.admin.qualification"></package>
         </packages>
     </test>
 <!--    <test name="Run on Edge browser">-->

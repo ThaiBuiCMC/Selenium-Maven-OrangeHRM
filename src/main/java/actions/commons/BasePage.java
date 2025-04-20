@@ -297,6 +297,8 @@ public class BasePage {
     public boolean waitForElementSelected(WebDriver driver, String locator){
         return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.elementToBeSelected(getByXpath(locator)));
     }
+
+    //Hard code
     public void sleepInSeconds(long timeInSeconds){ //hard wait
         try {
             Thread.sleep(timeInSeconds);
