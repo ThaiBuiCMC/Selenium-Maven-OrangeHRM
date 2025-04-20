@@ -75,17 +75,6 @@ jobs:
           # Ví dụ, với một số phiên bản, nó có thể là ./orangehrm_src/web hoặc ./orangehrm_src/public
           echo "ORANGEHRM_WEBROOT=./orangehrm_src/web" >> $GITHUB_ENV # Thay đổi path nếu cần
 
-      - name: DEBUG - List OrangeHRM files
-        run: |
-          echo "OrangeHRM Source Root (Parent of Webroot):"
-          ls -la ${{ env.ORANGEHRM_WEBROOT }}/..
-          echo "OrangeHRM Webroot:"
-          ls -la ${{ env.ORANGEHRM_WEBROOT }}
-          # Kiểm tra thêm thư mục cụ thể nếu cần
-          # if [ -d "${{ env.ORANGEHRM_WEBROOT }}/../lib/confs" ]; then
-          #   echo "OrangeHRM lib/confs:"
-          #   ls -la ${{ env.ORANGEHRM_WEBROOT }}/../lib/confs
-          # fi
       # --- Cấu hình Kết nối Database cho OrangeHRM ---
       - name: ⚙️ Configure OrangeHRM Database Connection
         env:
