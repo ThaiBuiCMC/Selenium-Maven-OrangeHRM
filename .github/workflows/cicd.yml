@@ -1,5 +1,6 @@
-name: Run Selenium TestNG Tests with Maven and Allure
-run-name: ${{ github.actor }} is running Selenium TestNG tests with Maven and Allure 🚀
+name: OrangeHRM Selenium CI with Maven & Allure
+run-name: ${{ github.actor }} is running OrangeHRM Selenium tests 🚀
+
 on:
   push:
     branches:
@@ -12,81 +13,216 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    # --- Dịch vụ chạy song song ---
+    services:
+      # Đặt tên cho service, ví dụ 'db'
+      db:
+        # Sử dụng image MariaDB (hoặc mysql)
+        image: mariadb:10.11 # *** THAY ĐỔI: Chọn phiên bản phù hợp với OrangeHRM của bạn ***
+        env:
+          MYSQL_ROOT_PASSWORD: test_root_password # Mật khẩu root (chỉ dùng cho test)
+          MYSQL_DATABASE: test_orangehrm_db       # Tên database sẽ được tạo
+          MYSQL_USER: test_orangehrm_user         # User để OrangeHRM kết nối
+          MYSQL_PASSWORD: test_password           # Mật khẩu cho user trên
+        ports:
+          - 3306:3306 # Map port để có thể truy cập từ runner nếu cần
+        # Options để kiểm tra sức khỏe DB trước khi job bắt đầu chạy các step sau
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost -P 3306 -u root -p$MYSQL_ROOT_PASSWORD"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      - name: Checkout code #to get the right sourse code from repository
+      - name: 🛒 Checkout Test Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17 #need to match with pom.xml
+      # --- Cài đặt Môi trường Cần Thiết ---
+      - name: ☕ Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '17' # Đảm bảo khớp với pom.xml
           distribution: 'temurin'
+          cache: 'maven' # Cache dependencies Maven
 
-      - name: 📦 Cache Maven Dependencies #reduce cache time
-        uses: actions/cache@v4
+      - name: 🐘 Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          php-version: '8.1' # *** THAY ĐỔI: Chọn phiên bản PHP tương thích OrangeHRM ***
+          extensions: gd, zip, mysql, intl, ldap, soap, xml # *** THAY ĐỔI: Các extension PHP cần thiết cho OrangeHRM ***
+          tools: composer # Nếu cần composer
 
-      - name: Set up Maven
+      - name: 🐬 Install MySQL Client
+        run: sudo apt-get update && sudo apt-get install -y default-mysql-client
+
+      - name: 🐘 Set up Maven
         uses: stCarolas/setup-maven@v4.5
         with:
-          maven-version: 3.9.9
+          maven-version: 3.9.9 # *** THAY ĐỔI: Nếu bạn dùng phiên bản Maven khác ***
 
-      - name: Run TestNG Tests with Maven
-        run: mvn clean test -Dsurefire.useFile=false --batch-mode # Chạy test bằng Maven, log hiển thị rõ hơn
-      # Sử dụng `mvn clean test` thay vì `mvn clean install` để chỉ chạy test mà không đóng gói JAR,
-      # đảm bảo chạy đúng `runAllTestcases.xml` (nếu đã cấu hình trong `maven-surefire-plugin`).
-      # batch mode: Giảm log không cần thiết, sạch và nhanh hơn, neu muon debug thi bo batchmode
+      # --- Chuẩn bị OrangeHRM ---
+      - name: 📥 Download and Extract OrangeHRM
+        run: |
+          echo "Downloading OrangeHRM..."
+          # *** THAY THẾ BẰNG LỆNH TẢI VÀ GIẢI NÉN PHIÊN BẢN ORANGEHRM CỦA BẠN ***
+          # Ví dụ:
+          # wget https://excellmedia.dl.sourceforge.net/project/orangehrm/stable/5.7/orangehrm-5.7.zip -O orangehrm.zip
+          # unzip orangehrm.zip -d ./orangehrm_src
+          # Hoặc nếu source có sẵn trong repo test:
+          # mkdir ./orangehrm_src && cp -r path/to/your/orangehrm/. ./orangehrm_src
+          echo "OrangeHRM source prepared in ./orangehrm_src"
+          # *** THAY ĐỔI: Xác định thư mục web root thực tế của OrangeHRM (quan trọng!) ***
+          # Ví dụ, với một số phiên bản, nó có thể là ./orangehrm_src/web hoặc ./orangehrm_src/public
+          echo "ORANGEHRM_WEBROOT=./orangehrm_src/web" >> $GITHUB_ENV # Thay đổi path nếu cần
 
-#      - name: Generate Allure Report
-#        run:  mvn allure:report -q
-#        if: always()  # run this step eventhough it is failed.
-#      #  ls -lrt; pwd; ls -lrt target/;
+      # --- Cấu hình Kết nối Database cho OrangeHRM ---
+      - name: ⚙️ Configure OrangeHRM Database Connection
+        env:
+          DB_HOST: db       # Tên service database đã định nghĩa ở trên
+          DB_PORT: 3306     # Port của service database
+          DB_NAME: test_orangehrm_db
+          DB_USER: test_orangehrm_user
+          DB_PASS: test_password
+        run: |
+          echo "Configuring OrangeHRM database connection..."
+          # *** THAY ĐỔI ĐƯỜNG DẪN NÀY CHO ĐÚNG VỚI PHIÊN BẢN ORANGEHRM CỦA BẠN ***
+          # Đường dẫn đến file config gốc và file config sẽ sử dụng
+          # Ví dụ cho một số phiên bản cũ hơn:
+          # CONFIG_TEMPLATE="${{ env.ORANGEHRM_WEBROOT }}/../lib/confs/Conf.php-distribution"
+          # CONFIG_TARGET="${{ env.ORANGEHRM_WEBROOT }}/../lib/confs/Conf.php"
+          # Ví dụ cho các phiên bản mới hơn dùng .env:
+          CONFIG_TEMPLATE="${{ env.ORANGEHRM_WEBROOT }}/../.env.example" # Hoặc tên file tương tự
+          CONFIG_TARGET="${{ env.ORANGEHRM_WEBROOT }}/../.env"
 
-#
-#      - name: Upload Allure Report
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: allure-report
-#          path: target/site/allure-maven-plugin/
-#
-#      - name: Upload Test Reports
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: test-reports
-#          path: target/surefire-reports/
+          if [ ! -f "$CONFIG_TEMPLATE" ]; then
+            echo "ERROR: OrangeHRM config template/example not found at $CONFIG_TEMPLATE"
+            exit 1
+          fi
 
+          cp "$CONFIG_TEMPLATE" "$CONFIG_TARGET"
+
+          # Sử dụng sed để thay thế các giá trị placeholder bằng giá trị từ biến môi trường
+          # *** CÁC KHÓA ('DB_HOST', 'DB_USERNAME', ...) CÓ THỂ KHÁC NHAU GIỮA CÁC PHIÊN BẢN ***
+          # Kiểm tra file .env.example hoặc Conf.php-distribution của bạn
+          sed -i "s/^DB_HOST=.*/DB_HOST=$DB_HOST/g" "$CONFIG_TARGET"
+          sed -i "s/^DB_PORT=.*/DB_PORT=$DB_PORT/g" "$CONFIG_TARGET"
+          sed -i "s/^DB_DATABASE=.*/DB_DATABASE=$DB_NAME/g" "$CONFIG_TARGET"
+          sed -i "s/^DB_USERNAME=.*/DB_USERNAME=$DB_USER/g" "$CONFIG_TARGET"
+          sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/g" "$CONFIG_TARGET"
+          # Có thể cần thay đổi các cấu hình khác nếu cần (APP_URL, etc.)
+
+          echo "OrangeHRM configuration file ($CONFIG_TARGET) updated:"
+          cat "$CONFIG_TARGET" # In ra để kiểm tra
+
+      # --- Khởi tạo Schema Database ---
+      - name: 💾 Initialize Database Schema
+        env:
+          DB_HOST: db
+          DB_NAME: test_orangehrm_db
+          DB_USER: test_orangehrm_user
+          DB_PASS: test_password
+        run: |
+          echo "Waiting for database service to be fully ready..."
+          sleep 15 # Đợi DB khởi động hoàn toàn
+
+          echo "Initializing database schema..."
+          # *** BẠN CẦN CÓ FILE SQL ĐỂ TẠO SCHEMA HOẶC DÙNG LỆNH ARTISAN/CONSOLE CỦA ORANGEHRM ***
+          # Cách 1: Dùng file SQL (nếu có)
+          # THAY THẾ 'path/to/your/orangehrm_db_script.sql' BẰNG ĐƯỜNG DẪN ĐÚNG
+          # SCHEMA_SCRIPT_PATH="path/to/your/orangehrm_db_script.sql"
+          # if [ -f "$SCHEMA_SCRIPT_PATH" ]; then
+          #   mysql -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME < "$SCHEMA_SCRIPT_PATH"
+          #   echo "Database schema initialized from SQL script."
+          # else
+          #   echo "WARNING: SQL schema script not found at $SCHEMA_SCRIPT_PATH. Trying console command..."
+          # fi
+
+          # Cách 2: Dùng lệnh console của OrangeHRM (phổ biến hơn với các phiên bản mới dựa trên Symfony/Laravel)
+          # Cần cd vào thư mục gốc của OrangeHRM (nơi có file 'symfony' hoặc 'artisan')
+          ORANGEHRM_ROOT=$(dirname "${{ env.ORANGEHRM_WEBROOT }}") # Thư mục cha của webroot
+          cd $ORANGEHRM_ROOT
+          # Lệnh migrate có thể khác nhau, kiểm tra tài liệu OrangeHRM
+          # Có thể cần chạy composer install trước nếu chưa có vendor
+          # composer install --no-dev --optimize-autoloader
+          php symfony doctrine:schema:create --no-interaction || php bin/console doctrine:schema:create --no-interaction || php artisan migrate --seed --force
+          # `--no-interaction` hoặc `--force` để chạy không cần hỏi xác nhận
+          echo "Database schema initialized using OrangeHRM console command."
+          cd $GITHUB_WORKSPACE # Quay lại thư mục gốc của workflow
+
+      # --- Chạy OrangeHRM ---
+      - name: ▶️ Start OrangeHRM using PHP Built-in Server
+        run: |
+          echo "Starting OrangeHRM server..."
+          # Chạy ngầm và chuyển hướng output
+          # Đảm bảo -t trỏ đúng vào thư mục web root của OrangeHRM
+          nohup php -S 0.0.0.0:8080 -t ${{ env.ORANGEHRM_WEBROOT }} > /tmp/orangehrm.log 2>&1 &
+          sleep 10 # Đợi server khởi động kỹ hơn
+          echo "Checking if OrangeHRM is running..."
+          # Kiểm tra trang login hoặc trang chủ
+          curl -I --fail http://localhost:8080/ || (echo "Failed to start OrangeHRM or it returned an error"; cat /tmp/orangehrm.log; exit 1)
+          echo "OrangeHRM seems to be running on http://localhost:8080"
+
+      # --- Set up WebDriver ---
+      - name: 🌐 Setup ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+        # Action này sẽ tự động tải ChromeDriver phù hợp và thêm vào PATH
+
+      # --- Chạy Tests ---
+      - name: 🧪 Run TestNG Tests with Maven
+        env:
+          # Truyền URL của OrangeHRM đang chạy vào môi trường test
+          SELENIUM_BASE_URL: http://localhost:8080
+          # Truyền thông tin DB nếu test cần truy cập trực tiếp (tùy chọn)
+          TEST_DB_HOST: db
+          TEST_DB_PORT: 3306
+          TEST_DB_NAME: test_orangehrm_db
+          TEST_DB_USER: test_orangehrm_user
+          TEST_DB_PASS: test_password
+        run: |
+          echo "Running Selenium tests against $SELENIUM_BASE_URL"
+          # Truyền URL và thông tin DB (nếu cần) qua system properties
+          mvn clean test -Dsurefire.useFile=false --batch-mode \
+            -Dselenium.base.url=$SELENIUM_BASE_URL \
+            -Dtest.db.host=$TEST_DB_HOST \
+            -Dtest.db.port=$TEST_DB_PORT \
+            -Dtest.db.name=$TEST_DB_NAME \
+            -Dtest.db.user=$TEST_DB_USER \
+            -Dtest.db.pass=$TEST_DB_PASS
+
+      # --- Các bước báo cáo (giữ nguyên từ file gốc của bạn) ---
       - name: 📊 Generate Allure Report
-        if: always()
+        if: always() # Luôn chạy bước này ngay cả khi test thất bại
         run: |
           mvn allure:report -q
-          
-      - name: ☁️ Upload Allure HTML Report
+
+      - name: ☁️ Upload Allure HTML Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: allure-report-html
           path: target/site/allure-maven-plugin/
 
-      - name: 📄 Upload Raw Test Reports
+      - name: 📄 Upload Raw Test Reports Artifact (Surefire)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: test-reports-surefire
           path: target/surefire-reports/
 
       - name: 🌐 Deploy Allure Report to GitHub Pages
         if: always()
-        uses: peaceiris/actions-gh-pages@v3 # Deploy báo cáo Allure lên GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4 # Sử dụng v4 mới nhất
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/site/allure-maven-plugin/
-          publish_branch: gh-pages
+          publish_branch: gh-pages # Nhánh để deploy report
+          force_orphan: true # Tạo nhánh mới hoàn toàn mỗi lần deploy (tránh lỗi merge)
 
       - name: 🔗 Print Allure Report URL
         if: always()
         run: |
-          echo "🔗 Allure Report is available at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          # Lấy tên repo và owner từ context
+          REPO_OWNER=$(echo '${{ github.repository }}' | cut -d'/' -f1)
+          REPO_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
+          echo "🔗 Allure Report deployed to: https://${REPO_OWNER}.github.io/${REPO_NAME}/"
+
