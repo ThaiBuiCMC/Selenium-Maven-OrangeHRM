@@ -33,13 +33,13 @@
             <version>${selenium.version}</version>
         </dependency>
 
-        <!-- TestNG: Framework kiểm thử đơn vị và tích hợp, hỗ trợ chạy test với XML -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
+<!--        &lt;!&ndash; TestNG: Framework kiểm thử đơn vị và tích hợp, hỗ trợ chạy test với XML &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.testng</groupId>-->
+<!--            <artifactId>testng</artifactId>-->
+<!--            <version>${testng.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!-- WebDriverManager: Quản lý driver (như ChromeDriver) tự động, không cần tải offline -->
         <dependency>
@@ -75,7 +75,7 @@
         <!--            <version>${poi.version}</version>-->
         <!--        </dependency>-->
 
-        <!-- TestNG (lặp lại, sửa scope về compile để dùng trong code chính nếu cần) -->
+        <!-- TestNG (sửa scope về compile để dùng trong code chính nếu cần, complie used for both main and test) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
