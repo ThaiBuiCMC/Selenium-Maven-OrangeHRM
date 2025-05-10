@@ -1,14 +1,18 @@
 package actions.pageObject.admin.qualification;
 
 import actions.commons.BasePage;
+import actions.utilities.DBUtils;
 import interfaces.pageUIs.admin.qualification.EducationPageUI;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import static actions.commons.DBConstants.*;
 
 public class EducationPageObject extends BasePage {
     private WebDriver driver;
-    public EducationPageObject(WebDriver driver){
+    private DBUtils dbUtils;
+    public EducationPageObject(WebDriver driver, DBUtils dbUtils){
         this.driver = driver;
+        this.dbUtils = dbUtils;
     }
     public void clickToAdminSection() {
         waitForElementClickable(driver, EducationPageUI.ADMIN_MENU);
@@ -117,5 +121,17 @@ public class EducationPageObject extends BasePage {
     public String getErrorUnderInputField(){
         waitForElementVisible(driver, EducationPageUI.ERROR_UNDER_INPUT_NAME);
         return getElementText(driver, EducationPageUI.ERROR_UNDER_INPUT_NAME);
+    }
+    public boolean isEducationExist(String education){
+        return dbUtils.isItemExist(education, SEARCH_BY_EDUCATION_NAME);
+    }
+    public void updateEducation(String education){
+        dbUtils.updateItem(INSERT_EDUCATION, education);
+    }
+    public void deleteEducationByName(String name){
+        dbUtils.deleteItemByUniqueCriteria(DELETE_BY_EDUCATION_NAME,name);
+    }
+    public int countEducationByName(String name){
+        return dbUtils.countItemByUnique(COUNT_EDUCATION_BY_NAME, name);
     }
 }

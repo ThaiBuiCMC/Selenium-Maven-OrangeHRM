@@ -25,35 +25,35 @@ public class DBUtils {
             return false; // Coi như không hợp lệ nếu có lỗi khi kiểm tra
         }
     }
-    public boolean isEducationExist(String educationName) {
+    public boolean isItemExist(String name, String query) {
         // check Connection before using
         if (!isConnectionValid()) {
-            logger.error("Database connection is not valid for checking existence of: {}", educationName);
+            logger.error("Database connection is not valid for checking existence of: {}", name);
             throw new IllegalStateException("Database connection is closed or invalid."); //phuong thuc goi vao luc doi tuong dang o trang thai khong hop le
         }
         //Using
-        try (PreparedStatement stmt = connection.prepareStatement(SEARCH_BY_EDUCATION_NAME)){
-             //create an object contains SQL query for executing SQL + dynamic variables
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+             //create an object contains SQL query for executing SQL + dynamic variablesSEARCH_BY_EDUCATION_NAME
              //try-with-resources: auto close resources
-            stmt.setString(1, educationName);
+            stmt.setString(1, name);
             try(ResultSet rs = stmt.executeQuery()) {//execute and return a rs contain/store result
                 return rs.next();//move to next line in the results, if has --> return True, unless False
             }
         } catch (SQLException e){
-            logger.error("Error checking if education exists: {}", educationName, e);
-            throw new RuntimeException("Database error while checking education existence for: " + educationName, e);
+            logger.error("Error checking if education exists: {}", name, e);
+            throw new RuntimeException("Database error while checking education existence for: " + name, e);
         }
     }
-    public int updateEducation(Object...params){
+
+    public int updateItem(String query, Object...params){
         // check Connection before using
         if (!isConnectionValid()) {
             logger.error("Database connection is not valid");
             throw new IllegalStateException("Database connection is closed or invalid.");
         }
         //Update
-        try ( //try-with-resources: auto close resources
-              PreparedStatement stmt = connection.prepareStatement(INSERT_EDUCATION);
-              //ResultSet rs = stmt.executeQuery();
+        try ( //try-with-resources: auto close resourcesINSERT_EDUCATION
+              PreparedStatement stmt = connection.prepareStatement(query);
         ){
             //gan params to PreparedStatement
             for (int i=0; i<params.length; i++){
@@ -66,47 +66,47 @@ public class DBUtils {
             throw new RuntimeException("Database error while update education", e);
         }
     }
-    public int deleteEducationByName(String name){
+    public int deleteItemByUniqueCriteria(String query, String unique){
         // check Connection before using
         if (!isConnectionValid()) {
-            logger.error("Database connection is not valid for checking existence of: {}", name);
+            logger.error("Database connection is not valid for checking existence of: {}", unique);
             throw new IllegalStateException("Database connection is closed or invalid.");
         }
         //Delete
         try ( //try-with-resources: auto close resources
-              PreparedStatement stmt = connection.prepareStatement(DELETE_BY_EDUCATION_NAME)
+              PreparedStatement stmt = connection.prepareStatement(query)
         ){
-            stmt.setString(1, name); //gan xong roi execute
+            stmt.setString(1, unique); //gan xong roi execute
             int affectedRows = stmt.executeUpdate(); //INSERT, UPDATE, DELETE. --> executeUpdate()
-            logger.info("Deleted {} education record(s) with name: {}", affectedRows, name);
+            logger.info("Deleted {} education record(s) with name: {}", affectedRows, unique);
             return affectedRows;
         } catch (SQLException e){
-            logger.error("Error checking if education exists: {}", name, e);
-            throw new RuntimeException("Database error while checking education existence for: " + name, e);
+            logger.error("Error checking if education exists: {}", unique, e);
+            throw new RuntimeException("Database error while checking education existence for: " + unique, e);
         }
     }
-    public int countEducationByName(String educationName){
+    public int countItemByUnique(String query, String unique){
         // check Connection before using
         if (!isConnectionValid()) {
-            logger.error("Database connection is not valid for checking existence of: {}", educationName);
+            logger.error("Database connection is not valid for checking existence of: {}", unique);
             throw new IllegalStateException("Database connection is closed or invalid.");
         }
         //Using
         try ( //try-with-resources: auto close resources
-              PreparedStatement stmt = connection.prepareStatement(COUNT_EDUCATION_BY_NAME);
+              PreparedStatement stmt = connection.prepareStatement(query);
         ){
-            stmt.setString(1, educationName);
+            stmt.setString(1, unique);
             try(ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     int count = rs.getInt(1); //// Lấy giá trị cột+dong đầu tiên (là COUNT(*))
-                    logger.debug("Found {} record(s) for education '{}'", count, educationName);
+                    logger.debug("Found {} record(s) for education '{}'", count, unique);
                     return count;
                 }
                 return 0;
             }// resultSet will be auto closed here
         }catch (SQLException e){
-            logger.error("Error counting education records for: {}", educationName, e);
-            throw new RuntimeException("Database error while counting education records for: " + educationName, e);
+            logger.error("Error counting education records for: {}", unique, e);
+            throw new RuntimeException("Database error while counting education records for: " + unique, e);
         } // stmt will be auto closed here
     }
 }

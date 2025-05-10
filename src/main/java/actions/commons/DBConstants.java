@@ -14,4 +14,8 @@ public class DBConstants {
 
     public static final String DELETE_BY_EDUCATION_NAME = "DELETE FROM ohrm_education WHERE name = ?";
     public static final String COUNT_EDUCATION_BY_NAME = "SELECT COUNT(*) FROM ohrm_education WHERE name = ?";
+
+    //SQL query for Language
+    public static final String DELETE_BY_LANGUAGE_NAME = "DELETE FROM ohrm_language WHERE name = ?";
+    public static final String SEARCH_BY_LANGUAGE_NAME = "SELECT * FROM ohrm_language WHERE name = ?";
 }

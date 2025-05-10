@@ -26,7 +26,7 @@ public class Education extends BaseTest {
     @Description("Open Admin Page")
     public void beforeClass(ITestContext context) {
         driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
-        educationPage = new EducationPageObject(driver);
+        educationPage = new EducationPageObject(driver, dbUtils);
         educationPage.clickToAdminSection();
     }
     @BeforeMethod(alwaysRun = true)
@@ -43,7 +43,7 @@ public class Education extends BaseTest {
     }
     @Test
     @Step("ED_02_User_Create_New_Education")
-    public void ED_02_User_Create_New_Job_Title() {
+    public void ED_02_User_Create_New_Education() {
         name = generateRandomName();
         educationPage.clickToAddBtn();
         verifyTrue(educationPage.isAddEducationLabelDisplayed());
@@ -57,10 +57,10 @@ public class Education extends BaseTest {
         verifyTrue(educationPage.isEducationDisplayed(name));
 
         //Verify Database
-        verifyTrue(dbUtils.isEducationExist(name));
+        verifyTrue(educationPage.isEducationExist(name));
 
         //Clear Data from DB
-        dbUtils.deleteEducationByName(name);
+        educationPage.deleteEducationByName(name);
     }
     @Test
     @Step("ED_03_User_Update_Education")
@@ -87,11 +87,11 @@ public class Education extends BaseTest {
         verifyFalse(educationPage.isEducationDisplayed(name));
 
         //Verify Database
-        verifyTrue(dbUtils.isEducationExist(updatedName));
-        verifyFalse(dbUtils.isEducationExist(name));
+        verifyTrue(educationPage.isEducationExist(updatedName));
+        verifyFalse(educationPage.isEducationExist(name));
 
         //Clear Data from DB
-        dbUtils.deleteEducationByName(updatedName);
+        educationPage.deleteEducationByName(updatedName);
     }
     @Test
     @Step("ED_04_User_Delete_Education")
@@ -115,10 +115,10 @@ public class Education extends BaseTest {
         verifyFalse(educationPage.isEducationDisplayed(name));
 
         //Verify Database
-        verifyFalse(dbUtils.isEducationExist(name));
+        verifyFalse(educationPage.isEducationExist(name));
 
         //Clear Data from DB
-        dbUtils.deleteEducationByName(name);
+        educationPage.deleteEducationByName(name);
 
     }
     @Test(groups = "runnow")
@@ -154,18 +154,18 @@ public class Education extends BaseTest {
         verifyFalse(educationPage.isEducationDisplayed(name2));
 
         //Verify from Database
-        verifyFalse(dbUtils.isEducationExist(name));
-        verifyFalse(dbUtils.isEducationExist(name2));
+        verifyFalse(educationPage.isEducationExist(name));
+        verifyFalse(educationPage.isEducationExist(name2));
 
         //Clear data from DB
-        dbUtils.deleteEducationByName(name);
-        dbUtils.deleteEducationByName(name2);
+        educationPage.deleteEducationByName(name);
+        educationPage.deleteEducationByName(name2);
     }
     @Test
     public void ED_06_User_Can_Not_Add_Duplicate_Education(){
         //create data 1 from INSERT in DB
         name = generateRandomName();
-        dbUtils.updateEducation(name);
+        educationPage.updateEducation(name);
         //Add new duplicated data from UI
         educationPage.clickToAddBtn();
         verifyTrue(educationPage.isAddEducationLabelDisplayed());
@@ -175,8 +175,8 @@ public class Education extends BaseTest {
         //Verify from UI
         Assert.assertEquals(educationPage.getErrorUnderInputField(), "Already exists");
         //Verify from DB
-        Assert.assertEquals(dbUtils.countEducationByName(name), 1);
+        Assert.assertEquals(educationPage.countEducationByName(name), 1);
         //Clear data from DB
-        dbUtils.deleteEducationByName(name);
+        educationPage.deleteEducationByName(name);
     }
 }

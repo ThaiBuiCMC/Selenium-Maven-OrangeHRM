@@ -30,15 +30,15 @@ public class BaseTest extends BasePage{
     @BeforeTest(alwaysRun = true)
     @Parameters({"browser", "headless"})
     public void setUp(String browserName, @Optional("false") boolean headless, ITestContext context) throws SQLException {
-        try {
-            connection = DBConnection.getConnection();
-            dbUtils = new DBUtils(connection); // Khởi tạo DBUtils với kết nối hiện tại
+//        try {
+//            connection = DBConnection.getConnection();
+//            dbUtils = new DBUtils(connection); // Khởi tạo DBUtils với kết nối hiện tại
             driver = openBrowser(browserName, headless);
             context.setAttribute("WebDriver", driver); // save Driver into Context to report
-        } catch (SQLException e) {
-            System.err.println("Failed to establish database connection: " + e.getMessage());
-            throw new RuntimeException("Failed to setup test environment due to DB connection error", e);
-        }
+//        } catch (SQLException e) {
+//            System.err.println("Failed to establish database connection: " + e.getMessage());
+//            throw new RuntimeException("Failed to setup test environment due to DB connection error", e);
+//        }
     }
     @AfterTest(alwaysRun = true)
     public void closeBrowser() {
@@ -83,19 +83,19 @@ public class BaseTest extends BasePage{
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         //Login
-//        openPageURL(driver, GlobalConstants.URL);
-//        waitForElementVisible(driver,"//input[@name='username']");
-//        sendkeyToElement(driver,"//input[@name='username']","Admin");
-//        waitForElementVisible(driver,"//input[@name='password']");
-//        sendkeyToElement(driver,"//input[@name='password']","admin123");
-//        clickToElement(driver,"//button[@type='submit']");
-
-        openPageURL(driver, GlobalConstants.URL_TEST);
+        openPageURL(driver, GlobalConstants.URL);
         waitForElementVisible(driver,"//input[@name='username']");
-        sendkeyToElement(driver,"//input[@name='username']","huyenhuyen");
+        sendkeyToElement(driver,"//input[@name='username']","Admin");
         waitForElementVisible(driver,"//input[@name='password']");
-        sendkeyToElement(driver,"//input[@name='password']","neTGv4Zj9!hlesdg@1");
+        sendkeyToElement(driver,"//input[@name='password']","admin123");
         clickToElement(driver,"//button[@type='submit']");
+
+//        openPageURL(driver, GlobalConstants.URL_TEST);
+//        waitForElementVisible(driver,"//input[@name='username']");
+//        sendkeyToElement(driver,"//input[@name='username']","huyenhuyen");
+//        waitForElementVisible(driver,"//input[@name='password']");
+//        sendkeyToElement(driver,"//input[@name='password']","neTGv4Zj9!hlesdg@1");
+//        clickToElement(driver,"//button[@type='submit']");
 
         return driver;
     }

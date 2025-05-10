@@ -13,12 +13,13 @@
 <!--            </run>-->
 <!--        </groups>-->
 <!--        <classes>-->
-<!--            <class name="testcases.admin.organization.GeneralInformation"></class>-->
+<!--&lt;!&ndash;            <class name="testcases.admin.qualification.Language"></class>&ndash;&gt;-->
+<!--            <class name="testcases.PIM.AddEmployee"></class>-->
 <!--        </classes>-->
         <packages>
             <package name="testcases.admin.organization"></package>
             <package name="testcases.admin.job"></package>
-            <package name="testcases.admin.qualification"></package>
+<!--            <package name="testcases.admin.qualification"></package>-->
         </packages>
     </test>
 <!--    <test name="Run on Edge browser">-->
