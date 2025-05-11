@@ -24,7 +24,8 @@ public class Structure extends BaseTest {
     @BeforeClass(alwaysRun = true)
     @Description("Open Admin section")
     public void beforeClass(ITestContext context) {
-        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
+//        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
+        WebDriver driver = getDriver();
         structurePage = new StructurePageObject(driver);
         structurePage.clickToAdminSection();
     }

@@ -13,18 +13,22 @@ import actions.reportConfig.AllureReportListener;
 public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
     //Define
     GeneralInforPageObject generalInforPage;
-    String updatedName, phone, email, country;
+    String updatedName =  "Huyen Checked"+getRandomNumber();
+    String phone = "0934653"+getRandomNumber();
+    String email = "check"+getRandomNumber()+"@gmail.com";
+    String country = "Antigua and Barbuda";
 
     @BeforeClass(alwaysRun = true)
     @Description("Open Generate Information Page")
     public void beforeClass(ITestContext context){
-        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
-        updatedName =  "Huyen Checked"+getRandomNumber();
-        phone = "0934653"+getRandomNumber();
-        email = "check"+getRandomNumber()+"@gmail.com";
-        country = "Antigua and Barbuda";
+        //driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
+        WebDriver driver = getDriver();
         generalInforPage = new GeneralInforPageObject(driver);
         generalInforPage.clickToAdminSection();
+    }
+    @BeforeMethod(alwaysRun = true)
+    @Description("For independent Testcases")
+    public void beforeTestcases(){
         generalInforPage.clickToOrganization();
         generalInforPage.clickToGenerateInformationOption();
     }

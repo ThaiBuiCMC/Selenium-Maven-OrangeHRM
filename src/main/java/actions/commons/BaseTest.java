@@ -21,7 +21,10 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class BaseTest extends BasePage{
-    protected WebDriver driver;
+    private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>(); //for using separated context in every test
+    protected WebDriver getDriver(){
+        return driverThreadLocal.get();
+    }
     protected Connection connection;
     protected DBUtils dbUtils;
 
@@ -33,7 +36,8 @@ public class BaseTest extends BasePage{
 //        try {
 //            connection = DBConnection.getConnection();
 //            dbUtils = new DBUtils(connection); // Khởi tạo DBUtils với kết nối hiện tại
-            driver = openBrowser(browserName, headless);
+            WebDriver driver = openBrowser(browserName, headless);
+            driverThreadLocal.set(driver);
             context.setAttribute("WebDriver", driver); // save Driver into Context to report
 //        } catch (SQLException e) {
 //            System.err.println("Failed to establish database connection: " + e.getMessage());
@@ -42,12 +46,15 @@ public class BaseTest extends BasePage{
     }
     @AfterTest(alwaysRun = true)
     public void closeBrowser() {
+        WebDriver driver = driverThreadLocal.get();
         if (driver != null) {
             driver.quit();
+            driverThreadLocal.remove();
         }
         DBConnection.closeConnection(connection);
     }
     public WebDriver openBrowser (String browserName, boolean headless) {
+        WebDriver driver;
         if (browserName.equalsIgnoreCase("Chrome")) {
             //WebDriverManager.chromedriver().clearDriverCache().setup();
             ChromeOptions options = new ChromeOptions();
@@ -82,6 +89,7 @@ public class BaseTest extends BasePage{
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
+
         //Login
         openPageURL(driver, GlobalConstants.URL);
         waitForElementVisible(driver,"//input[@name='username']");

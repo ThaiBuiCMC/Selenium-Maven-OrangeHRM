@@ -31,7 +31,8 @@ public class JobTitles extends BaseTest {
     @BeforeClass(alwaysRun = true)
     @Description("Open Job Titles Page")
     public void beforeClass(ITestContext context) {
-        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
+//        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
+        WebDriver driver = getDriver();
         jobTitlesPage = new JobTitlesPageObject(driver);
         jobTitlesPage.clickToAdminMenu();
     }

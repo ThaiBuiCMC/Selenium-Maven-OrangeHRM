@@ -159,7 +159,8 @@
                 <version>3.2.5</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/runAllTestcases.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>src/test/resources/runAllTestcases.xml</suiteXmlFile>-->
+                            <suiteXmlFile>src/test/resources/runTestcasesForDemo2.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
@@ -171,7 +172,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin Allure (nếu mày muốn tạo báo cáo Allure trên GitHub Actions) -->
+            <!-- Plugin Allure (nếu mày  tạo báo cáo Allure trên GitHub Actions) -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
