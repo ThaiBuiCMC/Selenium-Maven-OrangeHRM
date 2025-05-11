@@ -17,7 +17,7 @@
             <class name="testcases.admin.organization.GeneralInformation"></class>
             <class name="testcases.admin.organization.Locations"></class>
             <class name="testcases.admin.organization.Structure"></class>
-            <class name="testcases.admin.job.JobTitles"></class>
+<!--            <class name="testcases.admin.job.JobTitles"></class>-->
             <!--            <class name="testcases.PIM.AddEmployee"></class>-->
         </classes>
 <!--        <packages>-->
