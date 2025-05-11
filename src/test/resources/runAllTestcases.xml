@@ -15,6 +15,7 @@
         <classes>
 <!--            <class name="testcases.admin.qualification.Language"></class>-->
             <class name="testcases.admin.organization.GeneralInformation"></class>
+            <class name="testcases.admin.organization.Locations"></class>
             <!--            <class name="testcases.PIM.AddEmployee"></class>-->
         </classes>
 <!--        <packages>-->
