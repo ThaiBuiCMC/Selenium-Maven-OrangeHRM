@@ -12,15 +12,16 @@
 <!--                <include name="runnow"/>-->
 <!--            </run>-->
 <!--        </groups>-->
-<!--        <classes>-->
-<!--&lt;!&ndash;            <class name="testcases.admin.qualification.Language"></class>&ndash;&gt;-->
-<!--            <class name="testcases.PIM.AddEmployee"></class>-->
-<!--        </classes>-->
-        <packages>
-            <package name="testcases.admin.organization.GeneralInformation"></package>
-<!--            <package name="testcases.admin.job"></package>-->
-<!--            <package name="testcases.admin.qualification"></package>-->
-        </packages>
+        <classes>
+<!--            <class name="testcases.admin.qualification.Language"></class>-->
+            <class name="testcases.admin.organization.GeneralInformation"></class>
+            <!--            <class name="testcases.PIM.AddEmployee"></class>-->
+        </classes>
+<!--        <packages>-->
+<!--            <package name="testcases.admin.organization"></package>-->
+<!--&lt;!&ndash;            <package name="testcases.admin.job"></package>&ndash;&gt;-->
+<!--&lt;!&ndash;            <package name="testcases.admin.qualification"></package>&ndash;&gt;-->
+<!--        </packages>-->
     </test>
 <!--    <test name="Run on Edge browser">-->
 <!--        <parameter name="browser" value="Edge"></parameter>-->
