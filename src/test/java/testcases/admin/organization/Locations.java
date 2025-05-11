@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 @Epic("Check Location")
 @Feature("Check demo Feature Location")
 public class Locations extends BaseTest {
+    WebDriver driver;
     LocationsPageObject locationsPage;
     String name, name2;
     String city = "HaNoi" + getRandomNumber();
@@ -30,7 +31,7 @@ public class Locations extends BaseTest {
     @Description("Open Location Page")
     public void beforeClass(ITestContext context){
 //        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
-        WebDriver driver = getDriver();
+        driver = getDriver();
         locationsPage = new LocationsPageObject(driver);
         locationsPage.clickToAdminSection();
     }

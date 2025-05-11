@@ -20,12 +20,14 @@ import org.testng.annotations.Test;
 @Epic("Check Quality - Education")
 @Feature("Check demo Feature Education - Database")
 public class Education extends BaseTest {
+    WebDriver driver;
     EducationPageObject educationPage;
     String name, updatedName, name2;
     @BeforeClass(alwaysRun = true)
     @Description("Open Admin Page")
     public void beforeClass(ITestContext context) {
-        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
+        //driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
+        driver = getDriver();
         educationPage = new EducationPageObject(driver, dbUtils);
         educationPage.clickToAdminSection();
     }

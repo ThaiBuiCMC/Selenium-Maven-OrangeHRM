@@ -23,6 +23,7 @@ import static actions.commons.GlobalConstants.uploadFolderPath;
 @Epic("Check Job Titles")
 @Feature("Check demo Feature Job Titles")
 public class JobTitles extends BaseTest {
+    WebDriver driver;
     JobTitlesPageObject jobTitlesPage;
     String name, des, note, name2;
     String specFileName = "8888.png";
@@ -32,7 +33,7 @@ public class JobTitles extends BaseTest {
     @Description("Open Job Titles Page")
     public void beforeClass(ITestContext context) {
 //        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
-        WebDriver driver = getDriver();
+        driver = getDriver();
         jobTitlesPage = new JobTitlesPageObject(driver);
         jobTitlesPage.clickToAdminMenu();
     }
