@@ -1,1 +1,1 @@
-[]
+[{"uid":"80a4774eeb80560f","name":"GI_01_CheckUI","time":{"start":1746975402283,"stop":1746975402487,"duration":204},"status":"passed","severity":"normal"},{"uid":"8bdaaeed6159d695","name":"GI_01_EditGeneralInformation","time":{"start":1746975402549,"stop":1746975403745,"duration":1196},"status":"passed","severity":"trivial"}]
