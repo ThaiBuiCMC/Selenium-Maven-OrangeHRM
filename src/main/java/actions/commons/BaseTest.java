@@ -1,6 +1,7 @@
 package actions.commons;
 
-import interfaces.pageUIs.admin.organization.GeneralInforPageUI;
+import actions.utilities.DBConnection;
+import actions.utilities.DBUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,30 +13,48 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
 import org.testng.Assert;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Random;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class BaseTest extends BasePage{
-    protected WebDriver driver;
+    private static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>(); //for using separated context in every test
+    protected WebDriver getDriver(){
+        return driverThreadLocal.get();
+    }
+    protected Connection connection;
+    protected DBUtils dbUtils;
 
     //----------------------Annotations for Testcases----------------------------
 
     @BeforeTest(alwaysRun = true)
     @Parameters({"browser", "headless"})
-    public void setUp(String browserName, @Optional("false") boolean headless, ITestContext context){
-        driver = openBrowser(browserName, headless);
-        context.setAttribute("WebDriver", driver); // save Driver into Context to report
+    public void setUp(String browserName, @Optional("false") boolean headless, ITestContext context) throws SQLException {
+//        try {
+//            connection = DBConnection.getConnection();
+//            dbUtils = new DBUtils(connection); // Khởi tạo DBUtils với kết nối hiện tại
+            WebDriver driver = openBrowser(browserName, headless);
+            driverThreadLocal.set(driver);
+            context.setAttribute("WebDriver", driver); // save Driver into Context to report
+//        } catch (SQLException e) {
+//            System.err.println("Failed to establish database connection: " + e.getMessage());
+//            throw new RuntimeException("Failed to setup test environment due to DB connection error", e);
+//        }
     }
     @AfterTest(alwaysRun = true)
     public void closeBrowser() {
+        WebDriver driver = driverThreadLocal.get();
         if (driver != null) {
             driver.quit();
-            driver = null;
+            driverThreadLocal.remove();
         }
+        DBConnection.closeConnection(connection);
     }
     public WebDriver openBrowser (String browserName, boolean headless) {
+        WebDriver driver;
         if (browserName.equalsIgnoreCase("Chrome")) {
             //WebDriverManager.chromedriver().clearDriverCache().setup();
             ChromeOptions options = new ChromeOptions();
@@ -70,6 +89,7 @@ public class BaseTest extends BasePage{
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
+
         //Login
         openPageURL(driver, GlobalConstants.URL);
         waitForElementVisible(driver,"//input[@name='username']");
@@ -77,6 +97,14 @@ public class BaseTest extends BasePage{
         waitForElementVisible(driver,"//input[@name='password']");
         sendkeyToElement(driver,"//input[@name='password']","admin123");
         clickToElement(driver,"//button[@type='submit']");
+
+//        openPageURL(driver, GlobalConstants.URL_TEST);
+//        waitForElementVisible(driver,"//input[@name='username']");
+//        sendkeyToElement(driver,"//input[@name='username']","huyenhuyen");
+//        waitForElementVisible(driver,"//input[@name='password']");
+//        sendkeyToElement(driver,"//input[@name='password']","neTGv4Zj9!hlesdg@1");
+//        clickToElement(driver,"//button[@type='submit']");
+
         return driver;
     }
 

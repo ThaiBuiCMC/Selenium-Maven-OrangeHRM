@@ -18,13 +18,15 @@ import org.testng.annotations.Test;
 @Epic("Check Company Structure")
 @Feature("Check Company Structure Features")
 public class Structure extends BaseTest {
+    WebDriver driver;
     StructurePageObject structurePage;
     String unitName, des, unitId;
 
     @BeforeClass(alwaysRun = true)
     @Description("Open Admin section")
     public void beforeClass(ITestContext context) {
-        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
+//        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
+        driver = getDriver();
         structurePage = new StructurePageObject(driver);
         structurePage.clickToAdminSection();
     }
