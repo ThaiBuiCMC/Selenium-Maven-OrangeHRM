@@ -6,6 +6,7 @@ import interfaces.pageUIs.admin.qualification.EducationPageUI;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import static actions.commons.DBConstants.*;
+import static interfaces.pageUIs.BasePageUI.*;
 
 public class EducationPageObject extends BasePage {
     private WebDriver driver;
