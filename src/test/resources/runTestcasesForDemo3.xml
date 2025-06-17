@@ -8,17 +8,14 @@
     <parameter name="browser" value="Chrome"></parameter>
     <parameter name="headless" value="false"/>
     <parameter name="isCICD" value="false"/>
-        <groups>
-            <run>
-                <include name="runnow"/>
-            </run>
-        </groups>
+<!--        <groups>-->
+<!--            <run>-->
+<!--                <include name="runnow"/>-->
+<!--            </run>-->
+<!--        </groups>-->
         <classes>
             <class name="testcases.PIM.AddEmployee"/>
         </classes>
-<!--        <packages>-->
-<!--            <package name="testcases.PIM"></package>-->
-<!--        </packages>-->
     </test>
 <!--    <test name="Run API Testcase for Cypress site">-->
 <!--        <packages>-->

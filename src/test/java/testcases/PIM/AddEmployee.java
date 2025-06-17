@@ -192,17 +192,17 @@ public class AddEmployee extends BaseTest {
         addEmployeePage.enterEmployeeID(employeeId);
         addEmployeePage.clickSaveButton();
         ///Detail page is displaying
-        PersonalDetailPageObject personalDetailPage = addEmployeePage.PersonalDetailPageDisplaying(getDriver());
+        PersonalDetailPageObject personalDetailPage = PersonalDetailPageDisplaying(getDriver());
         verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
 
         //Update data from Listing page
-        EmployeeListPageObject employeeListPage = personalDetailPage.openEmployeeListPage(getDriver());
+        EmployeeListPageObject employeeListPage = openEmployeeListPage(getDriver());
         employeeListPage.enterEmployeeId(employeeId);
         employeeListPage.clickToSearchBtn();
         verifyTrue(employeeListPage.isEmployeeDisplay(employeeId, firstName, middleName, lastName));
         employeeListPage.clickToEditIcon(employeeId);
 
-        personalDetailPage = employeeListPage.PersonalDetailPageDisplaying(getDriver());
+        personalDetailPage = PersonalDetailPageDisplaying(getDriver());
         verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
         personalDetailPage.editFirstName(updatedFirstName);
         personalDetailPage.editMiddleName(updatedMiddleName);
@@ -218,11 +218,12 @@ public class AddEmployee extends BaseTest {
         verifyEquals(personalDetailPage.getEmployeeId(), updatedEmployeeId);
 
         //Verify in Listing
-        employeeListPage = personalDetailPage.openEmployeeListPage(getDriver());
+        employeeListPage = openEmployeeListPage(getDriver());
         ///Check displaying editted data
         employeeListPage.enterEmployeeId(updatedEmployeeId);
         employeeListPage.clickToSearchBtn();
         verifyTrue(employeeListPage.isEmployeeDisplay(updatedEmployeeId, updatedFirstName, updatedMiddleName, updatedLastName));
+
         ///Check disappearing old data
         employeeListPage.enterEmployeeId(employeeId);
         employeeListPage.clickToSearchBtn();
@@ -251,7 +252,7 @@ public class AddEmployee extends BaseTest {
         addEmployeePage.enterEmployeeID(employeeId);
         addEmployeePage.clickSaveButton();
         ///Detail page is displaying
-        PersonalDetailPageObject personalDetailPage = addEmployeePage.PersonalDetailPageDisplaying(getDriver());
+        PersonalDetailPageObject personalDetailPage = PersonalDetailPageDisplaying(getDriver());
         verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
 
         //Update data directly from detail page
@@ -269,7 +270,7 @@ public class AddEmployee extends BaseTest {
         verifyEquals(personalDetailPage.getEmployeeId(), updatedEmployeeId);
 
         //Verify in Listing
-        EmployeeListPageObject employeeListPage = personalDetailPage.openEmployeeListPage(getDriver());
+        EmployeeListPageObject employeeListPage = openEmployeeListPage(getDriver());
         ///Check displaying editted data
         employeeListPage.enterEmployeeId(updatedEmployeeId);
         employeeListPage.clickToSearchBtn();
