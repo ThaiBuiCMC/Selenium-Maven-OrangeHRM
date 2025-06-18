@@ -223,7 +223,6 @@ public class AddEmployee extends BaseTest {
         employeeListPage.enterEmployeeId(updatedEmployeeId);
         employeeListPage.clickToSearchBtn();
         verifyTrue(employeeListPage.isEmployeeDisplay(updatedEmployeeId, updatedFirstName, updatedMiddleName, updatedLastName));
-
         ///Check disappearing old data
         employeeListPage.enterEmployeeId(employeeId);
         employeeListPage.clickToSearchBtn();
