@@ -2,12 +2,8 @@ name: Run Selenium TestNG Tests with Maven and Allure
 run-name: ${{ github.actor }} is running Selenium TestNG tests with Maven and Allure 🚀
 on:
   push:
-    branches:
-      - develop
   pull_request:
-    branches:
-      - develop
-
+  
 jobs:
   test:
     runs-on: ubuntu-latest
